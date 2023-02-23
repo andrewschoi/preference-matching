@@ -40,7 +40,7 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    if (ranking.length !== NUM_PPL - 1) {
+    if (false) {
       alert("please select all ppl");
 
       return;
