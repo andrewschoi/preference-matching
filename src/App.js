@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Audio } from "react-loader-spinner";
 import "./App.css";
 import axios from "axios";
 
@@ -10,7 +11,7 @@ function App() {
   const [engagements, setEngagements] = useState([]);
 
   // CHANGE HERE FOR PPL
-  const NUM_PPL = 8;
+  const NUM_PPL = 0;
 
   const m = {
     andrew: 0,
@@ -194,9 +195,7 @@ function App() {
 
       <ol className="ranking-list">
         {ranking.map((user, rank) => (
-          <li key={rank}>
-            {rank + 1}. {user}
-          </li>
+          <li key={rank}>{user}</li>
         ))}
       </ol>
 
@@ -285,39 +284,66 @@ function App() {
 
       <div className="button-container">
         <button
-          className="button"
+          className="button submit-button"
           onClick={() => {
             handleSubmit();
           }}
         >
           Submit
         </button>
-        {success ? "your submission was received!" : ""}
-      </div>
-
-      <div>
-        <p>
-          {match.length !== NUM_PPL
-            ? "Still waiting for all responses..."
-            : "Ready to pair!"}
+        <p className="success-message">
+          {success ? "your submission was received!" : ""}
         </p>
-        <button className="button" onClick={findpair}>
-          Find Match
-        </button>
       </div>
 
-      <ol className="ranking-list">
-        {engagements.map((pair) => {
-          const p1 = pair[0];
-          const p2 = pair[1];
+      <div className="match-container">
+        <div>
+          <p>
+            {match.length !== NUM_PPL ? (
+              <div>
+                <Audio
+                  height="80"
+                  width="80"
+                  radius="9"
+                  color="green"
+                  ariaLabel="loading"
+                  wrapperStyle
+                  wrapperClass
+                />
+              </div>
+            ) : (
+              <img
+                src={
+                  "https://i.pinimg.com/550x/2b/11/5a/2b115adb901249d9fd7957de21397905.jpg"
+                }
+                height="90px"
+                width="90px"
+              />
+            )}
+          </p>
+          <button className="button find-match-button" onClick={findpair}>
+            Find Match
+          </button>
+          <p>
+            {match.length !== NUM_PPL
+              ? "Still waiting for some responses..."
+              : "Ready to match"}
+          </p>
+        </div>
 
-          return (
-            <li key={p1}>
-              ({p1}, {p2})
-            </li>
-          );
-        })}
-      </ol>
+        <ol className="ranking-list">
+          {engagements.map((pair) => {
+            const p1 = pair[0];
+            const p2 = pair[1];
+
+            return (
+              <li key={p1}>
+                ({p1}, {p2})
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </div>
   );
 }
