@@ -39,8 +39,9 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    if (ranking !== NUM_PPL - 1) {
+    if (ranking.length !== NUM_PPL - 1) {
       alert("please select all ppl");
+
       return;
     }
     await axios
