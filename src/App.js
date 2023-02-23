@@ -11,7 +11,7 @@ function App() {
   const [engagements, setEngagements] = useState([]);
 
   // CHANGE HERE FOR PPL
-  const NUM_PPL = 0;
+  const NUM_PPL = 8;
 
   const m = {
     andrew: 0,
