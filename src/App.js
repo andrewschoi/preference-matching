@@ -7,13 +7,42 @@ function App() {
   const [success, setSuccess] = useState(false);
   const [match, setMatch] = useState([]);
   const [submitter, setSubmitter] = useState("");
-  const [engagements, setEngagements] = useState({});
+  const [engagements, setEngagements] = useState([]);
+
+  // CHANGE HERE FOR PPL
+  const NUM_PPL = 8;
+
+  const m = {
+    andrew: 0,
+    enoch: 1,
+    pratyush: 2,
+    rohit: 3,
+    harrison: 4,
+    desmond: 5,
+    stuti: 6,
+    stephy: 7,
+  };
+
+  const inversem = {
+    0: "andrew",
+    1: "enoch",
+    2: "pratyush",
+    3: "rohit",
+    4: "harrison",
+    5: "desmond",
+    6: "stuti",
+    7: "stephy",
+  };
 
   const handleRanking = (e) => {
     setRanking((prev) => [...prev, e.target.innerHTML]);
   };
 
   const handleSubmit = async () => {
+    if (ranking !== NUM_PPL) {
+      alert("please select all ppl");
+      return;
+    }
     await axios
       .post(
         "https://92iuqgv2mi.execute-api.us-east-1.amazonaws.com/prod/worksesh",
@@ -50,28 +79,6 @@ function App() {
   }, []);
 
   const findpair = () => {
-    const m = {
-      andrew: 0,
-      enoch: 1,
-      pratyush: 2,
-      rohit: 3,
-      harrison: 4,
-      desmond: 5,
-      stuti: 6,
-      stephy: 7,
-    };
-
-    const inversem = {
-      0: "andrew",
-      1: "enoch",
-      2: "pratyush",
-      3: "rohit",
-      4: "harrison",
-      5: "desmond",
-      6: "stuti",
-      7: "stephy",
-    };
-
     const pref = match.map((mtch) => ({
       name: m[mtch.name],
       preference: mtch.ranking.map((name) => m[name]),
@@ -287,18 +294,24 @@ function App() {
         {success ? "your submission was received!" : ""}
       </div>
 
-      {match.length !== 4
+      {match.length !== NUM_PPL
         ? "Still waiting for all responses..."
         : "Ready to pair!"}
       <button className="button" onClick={findpair}>
         Find Match
       </button>
+
       <ol className="ranking-list">
-        {Object.entries(engagements).map(([key, val]) => (
-          <li key={key}>
-            {key}: {val}
-          </li>
-        ))}
+        {engagements.map((pair) => {
+          const p1 = pair[0];
+          const p2 = pair[1];
+
+          return (
+            <li key={p1}>
+              ({p1}, {p2})
+            </li>
+          );
+        })}
       </ol>
     </div>
   );
