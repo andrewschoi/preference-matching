@@ -61,14 +61,73 @@ function App() {
       stephy: 7,
     };
 
+    const inversem = {
+      0: "andrew",
+      1: "enoch",
+      2: "pratyush",
+      3: "rohit",
+      4: "harrison",
+      5: "desmond",
+      6: "stuti",
+      7: "stephy",
+    };
+
     const pref = match.map((mtch) => ({
       name: m[mtch.name],
       preference: mtch.ranking.map((name) => m[name]),
     }));
 
-    const stableMatching = (ranking) => {
-      const half = 4;
-    };
+    let hospitals = Object.entries(pref)
+      .slice(0, Math.floor(pref.length / 2))
+      .map((h) => parseInt(h[0]));
+    let residents = Object.entries(pref)
+      .slice(Math.floor(pref.length / 2))
+      .map((r) => parseInt(r[0]));
+
+    const preferences = {};
+    for (const key of Object.keys(pref)) {
+      const name = pref[key].name;
+      const preference = pref[key].preference;
+
+      if (hospitals.includes(name)) {
+        preferences[parseInt(name)] = preference.filter((p) =>
+          residents.includes(p)
+        );
+      } else {
+        preferences[parseInt(name)] = preference.filter((p) =>
+          hospitals.includes(p)
+        );
+      }
+    }
+
+    let unmatched = [...hospitals];
+    let pairings = new Map();
+    while (unmatched.length > 0) {
+      const hospital = unmatched.pop();
+
+      for (const resident of preferences[hospital]) {
+        if (pairings.has(resident)) {
+          const currentHospital = pairings[resident];
+
+          const currentRanking = preferences[currentHospital];
+          const newRanking = preferences[hospital];
+
+          if (newRanking < currentRanking) {
+            pairings.set(resident, hospital);
+            unmatched.unshift(currentHospital);
+            break;
+          }
+        } else {
+          pairings.set(resident, hospital);
+          break;
+        }
+      }
+    }
+    console.log(pairings);
+    let engagements = [];
+    for (let [key, value] of pairings) {
+      engagements.push([inversem[key], inversem[value]]);
+    }
 
     setEngagements(engagements);
   };
@@ -228,7 +287,7 @@ function App() {
         {success ? "your submission was received!" : ""}
       </div>
 
-      {match.length !== 3
+      {match.length !== 4
         ? "Still waiting for all responses..."
         : "Ready to pair!"}
       <button className="button" onClick={findpair}>
