@@ -179,7 +179,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="title">Rank most compatible to least compatible...</h1>
+      <h1 className="title">Rank least compatible to most compatible...</h1>
       <p className="subtitle">
         Be careful... you have to start over (refresh) if you make a mistake
       </p>
