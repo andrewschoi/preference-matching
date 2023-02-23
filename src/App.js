@@ -39,7 +39,7 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    if (ranking !== NUM_PPL) {
+    if (ranking !== NUM_PPL - 1) {
       alert("please select all ppl");
       return;
     }
@@ -294,12 +294,16 @@ function App() {
         {success ? "your submission was received!" : ""}
       </div>
 
-      {match.length !== NUM_PPL
-        ? "Still waiting for all responses..."
-        : "Ready to pair!"}
-      <button className="button" onClick={findpair}>
-        Find Match
-      </button>
+      <div>
+        <p>
+          {match.length !== NUM_PPL
+            ? "Still waiting for all responses..."
+            : "Ready to pair!"}
+        </p>
+        <button className="button" onClick={findpair}>
+          Find Match
+        </button>
+      </div>
 
       <ol className="ranking-list">
         {engagements.map((pair) => {
